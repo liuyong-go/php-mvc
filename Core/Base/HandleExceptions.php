@@ -17,9 +17,20 @@ class HandleExceptions{
         register_shutdown_function([$this, 'handleShutdown']);
         ini_set('display_errors', 'Off');
     }
+
+    /**
+     * 还不知什么场景触发
+     * @param $level
+     * @param $message
+     * @param string $file
+     * @param int $line
+     * @param array $context
+     * @throws \ErrorException
+     */
     public function handleError($level, $message, $file = '', $line = 0, $context = []){
         throw new \ErrorException($message, 0, $level, $file, $line);
     }
+
     public function handleException(){
         if(DEBUG){
             echo "<pre>";
@@ -29,6 +40,7 @@ class HandleExceptions{
             echo 'exception';
         }
     }
+
     public function handleShutdown(){
         if(DEBUG) {
             echo "<pre>";
