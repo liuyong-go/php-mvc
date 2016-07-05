@@ -20,7 +20,9 @@ class Route
      */
     public function run(){
         $path = $this->_parseRoutes();
+        //中间件
         $this->_runController($path);
+        //后置
     }
 
     /**
@@ -57,13 +59,15 @@ class Route
      * 运行控制器
      */
     protected function _runController($path){
-        echo $path;
         $pathParam = explode('/',$path);
         $namespace = ucfirst($pathParam[0]);
         $controller = ucfirst($pathParam[1]).'Controller';
-        $action = $pathParam[2];
+        $action = isset($pathParam[2]) ? $pathParam[2] : 'index';
         $params = array_slice($pathParam,3);
-
+        $classname =   'App\Controllers\\'.$namespace.'\\'.$controller;
+        $classReflection = new \ReflectionClass($classname);
+        $class = $classReflection->newInstance();
+        return call_user_func_array([$class,$action],$params);
     }
     /**
      * 设置请求
