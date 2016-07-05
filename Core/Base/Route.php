@@ -33,13 +33,16 @@ class Route
             return $routes['default_route'];
         }
         $uri_arr = explode('/',ltrim($request_uri,'/'));
+        $controller_path = '';
         //遍历控制器，无则遍历正则
         if(isset($routes['controller_route'][$uri_arr[0]])){
-            return $routes['controller_route'][$uri_arr[0]];
+            $controller_path = $routes['controller_route'][$uri_arr[0]];
         }else{
 
         }
-        throw new \Exception('未找到此路径');
+        if($controller_path == ''){
+            views('core/show_error',['message'=>'路径错误']);
+        }
     }
     /**
      * $path namespace/controller/action/p/p...
