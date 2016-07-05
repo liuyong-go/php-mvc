@@ -16,4 +16,7 @@ class IndexController extends BaseController{
         dd();
         echo 'test';
     }
+    public function user(){
+        echo 'user';
+    }
 }

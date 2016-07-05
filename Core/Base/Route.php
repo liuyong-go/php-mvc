@@ -34,14 +34,22 @@ class Route
         }
         $uri_arr = explode('/',ltrim($request_uri,'/'));
         $controller_path = '';
-        //遍历控制器，无则遍历正则
+        //遍历控制器，
         if(isset($routes['controller_route'][$uri_arr[0]])){
             $controller_path = $routes['controller_route'][$uri_arr[0]];
-        }else{
-
+        }else{//无则遍历正则
+            foreach($routes['preg_route'] as $key=>$val){
+                if (preg_match('#^/'.$key.'$#', $request_uri, $matches))
+                {
+                    if(strpos($val,'$') !== false && strpos($key,'(') !== false){
+                        $val = preg_replace('#^/'.$key.'$#', $val, $request_uri);
+                        return $val;
+                    }
+                }
+            }
         }
         if($controller_path == ''){
-            views('core/show_error',['message'=>'路径错误']);
+            show_error('没有找到控制器');
         }
     }
     /**
@@ -49,6 +57,7 @@ class Route
      * 运行控制器
      */
     protected function _runController($path){
+        echo $path;
         $pathParam = explode('/',$path);
         $namespace = ucfirst($pathParam[0]);
         $controller = ucfirst($pathParam[1]).'Controller';

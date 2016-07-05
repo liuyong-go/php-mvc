@@ -14,6 +14,13 @@ function load_config($path){
     return require_once APPPATH.'/Config/'.$path.'.php';
 }
 
+/**
+ * 加载视图文件
+ * @param $file
+ * @param array $data
+ * @param bool|false $_return
+ * @return string
+ */
 function views($file,$data=[],$_return=false){
     ob_start();
     $viewPath = APPPATH.'/Views/'.$file.'.php';
@@ -26,5 +33,9 @@ function views($file,$data=[],$_return=false){
     }else{
         ob_end_flush();
     }
+}
+
+function show_error($message){
+    views('core/show_error',['message'=>$message]);
     exit;
 }

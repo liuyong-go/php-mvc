@@ -12,6 +12,6 @@ return [
         'test'=>'home/test'
     ],
     'preg_route'=>[
-
+        'u_([0-9]+)_([0-9]+)'=>'home/index/user/$1/$2',
     ]
 ];
