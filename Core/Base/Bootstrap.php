@@ -16,8 +16,8 @@ class Bootstrap{
         spl_autoload_register([$this,'autoload']);
         $exception = new HandleExceptions();
         $exception->bootstrap();
-        $test = new IndexController();
-        $test->test();
+        $route = new Route();
+        $route->run();
 
     }
 
