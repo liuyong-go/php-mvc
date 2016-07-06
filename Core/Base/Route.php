@@ -16,6 +16,8 @@ class Route
 
     protected $action;
 
+    public $config_routes=[];
+
     public function __construct(){
 
     }
@@ -24,6 +26,7 @@ class Route
      * 根据路由执行控制器方法
      */
     public function run(){
+        $this->config_routes = load_config('routes');
         $path = $this->_parseRoutes();
         Request::getInstance()->setRequest();
         $this->_runController($path);
@@ -33,23 +36,22 @@ class Route
      * 匹配路由
      */
     protected  function _parseRoutes(){
-        $routes = load_config('routes');
         $request_uri = $_SERVER['REQUEST_URI'];
         $rs_uri_arr = explode('?',$request_uri);
         $request_uri = $rs_uri_arr[0];
         if($request_uri == '/'){
-            return $routes['default_route'];
+            return $this->config_routes['default_route'];
         }
         $uri_arr = explode('/',ltrim($request_uri,'/'));
         $controller_path = '';
         //遍历控制器，
-        if(isset($routes['controller_route'][$uri_arr[0]])){
-            $controller_path = $routes['controller_route'][$uri_arr[0]];
+        if(isset($this->config_routes['controller_route'][$uri_arr[0]])){
+            $controller_path = $this->config_routes['controller_route'][$uri_arr[0]];
             array_shift($uri_arr);
             $controller_path .= '/'.implode('/',$uri_arr);
             return $controller_path;
         }else{//无则遍历正则
-            foreach($routes['preg_route'] as $key=>$val){
+            foreach($this->config_routes['preg_route'] as $key=>$val){
                 if (preg_match('#^/'.$key.'$#', $request_uri, $matches))
                 {
                     if(strpos($val,'$') !== false && strpos($key,'(') !== false){
@@ -86,21 +88,30 @@ class Route
      * 执行控制前执行
      */
     protected function _preMiddleWare(){
-
+        $pre_middle = $this->config_routes['pre_middleware'];
+        if(isset($pre_middle[$this->controller])){
+            foreach($pre_middle[$this->controller] as $mid){
+                $classname =   'App\Middleware\\'.$mid;
+                $classReflection = new \ReflectionClass($classname);
+                $class = $classReflection->newInstance();
+                $class->handle(Request::getInstance()->getRequest());
+            }
+        }
     }
 
     /**
      * 执行完控制器后执行
      */
     protected function _suffixMiddleWare(){
-
-    }
-
-    /**
-     * 设置请求
-     */
-    protected function _setRequest(Request $request){
-
+        $suffix_middle = $this->config_routes['suffix_middleware'];
+        if(isset($suffix_middle[$this->controller])){
+            foreach($suffix_middle[$this->controller] as $mid){
+                $classname =   'App\Middleware\\'.$mid;
+                $classReflection = new \ReflectionClass($classname);
+                $class = $classReflection->newInstance();
+                $class->handle(Request::getInstance()->getRequest());
+            }
+        }
     }
 
 }

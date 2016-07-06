@@ -18,12 +18,12 @@ return [
      * 前置中间件
      */
     'pre_middleware'=>[
-
+        'Home\IndexController'=>['LegalCheck','LoginCheck']
     ],
     /**
      * 后置中间件
      */
     'suffix_middleware'=>[
-
+        'Home\IndexController'=>['OverDo']
     ]
 ];
