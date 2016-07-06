@@ -13,5 +13,17 @@ return [
     ],
     'preg_route'=>[
         'u_([0-9]+)_([0-9]+)'=>'home/index/user/$1/$2',
+    ],
+    /**
+     * 前置中间件
+     */
+    'pre_middleware'=>[
+
+    ],
+    /**
+     * 后置中间件
+     */
+    'suffix_middleware'=>[
+
     ]
 ];
