@@ -1,5 +1,7 @@
 <?php
 namespace Core\Base\Database;
+use PDO;
+use Closure;
 /**
  * 可连多数据库
  * Created by PhpStorm.
@@ -9,9 +11,20 @@ namespace Core\Base\Database;
  */
 class Connection
 {
+    /**
+     * The active PDO connection.
+     *
+     * @var PDO
+     */
     protected  $pdo;
-
+    /**
+     * The active PDO connection.
+     *
+     * @var PDO
+     */
     protected  $readPdo;
+
+    protected $transactions=0;
 
     private static $instance=null;
 
@@ -25,7 +38,7 @@ class Connection
      * 创建连接
      * @param $database
      */
-    public  function setDb($database){
+    public function setDb($database){
             $database_config = load_config('database');
             $datainfo = $database_config[$database];
             $this->pdo = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
@@ -38,6 +51,171 @@ class Connection
                 $this->readPdo = $this->pdo;
             }
     }
+    public function getPdo($sql){
+        return $this->transactions>0 ? $this->pdo : ($this->is_write_type($sql) ? $this->pdo : $this->readPdo);
+    }
+
+    /**
+     * @param $sql
+     * @param array $bind
+     * @return \PDOStatement
+     */
+    public function query($sql,$bind=[]){
+        $pdo = $this->getPdo($sql);
+        $sth = $pdo->prepare($sql);
+        $sth->execute($bind);
+        return $sth;
+    }
+    /**
+     * 获取多条记录
+     */
+    public function get($sql,$bind=[]){
+        $result = $this->query($sql,$bind);
+        return $result->fetchAll(PDO::FETCH_COLUMN);
+    }
+    /**
+     * 获取一条记录
+     */
+    public function first($sql,$bind=[]){
+        $result = $this->query($sql,$bind);
+        return $result->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * 判断sql 为写
+     *
+     * @param	string	An SQL query string
+     * @return	bool
+     */
+    public function is_write_type($sql)
+    {
+        return (bool) preg_match('/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
+    }
+
+    /**
+     * 执行一个sql 返回true 或false $affect 为true 返回影响的行数
+     * @param $sql
+     * @param array $bind
+     * @return bool
+     */
+    public function statement($sql,$bind=[],$affect = false){
+        $pdo = $this->getPdo($sql);
+        $sth = $pdo->prepare($sql);
+        $rs = $sth->execute($bind);
+        return $affect ? $sth->rowCount() : $rs;
+    }
+
+
+    /**
+     * 插入记录
+     * @param $table
+     * @param $values
+     */
+    public function insert($table,$values){
+
+    }
+
+    /**
+     * 更新
+     * @param $table
+     * @param $value
+     * @param $where
+     */
+    public function update($table,$value,$where){
+
+    }
+
+    /**
+     * 删除
+     * @param $table
+     * @param $where
+     */
+    public function delete($table,$where){
+
+    }
+    /**
+     * 闭包执行一个事务
+     *
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Throwable
+     */
+    public function transaction(Closure $callback)
+    {
+        $this->beginTransaction();
+
+        try {
+            $result = $callback($this);
+
+            $this->commit();
+        }
+
+        catch (\Exception $e) {
+            $this->rollBack();
+
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->rollBack();
+
+            throw $e;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 启动事务
+     *
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        ++$this->transactions;
+
+        if ($this->transactions == 1) {
+            $this->pdo->beginTransaction();
+        }
+    }
+
+    /**
+     * 提交事务
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        if ($this->transactions == 1) {
+            $this->pdo->commit();
+        }
+        --$this->transactions;
+    }
+
+    /**
+     * 回滚
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        if ($this->transactions == 1) {
+            $this->transactions = 0;
+            $this->pdo->rollBack();
+        }else{
+            --$this->transactions;
+        }
+    }
+
+    /**
+     * 获取当前启动的事务数量
+     *
+     * @return int
+     */
+    public function transactionLevel()
+    {
+        return $this->transactions;
+    }
+
 
 
 
