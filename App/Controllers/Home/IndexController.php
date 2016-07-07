@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
+use App\Models\Home\HomeModel;
 use Core\Base\Request;
 
 /**
@@ -15,8 +16,9 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        var_dump(Request::getInstance()->getRequest());
-        echo 'index';
+        $rs = HomeModel::getInstance()->test_query();
+        echo "<pre>";
+        print_r($rs);
     }
     public function test(){
         echo 'test';

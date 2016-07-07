@@ -40,7 +40,7 @@ class Connection
      */
     public function setDb($database){
             $database_config = load_config('database');
-            $datainfo = $database_config[$database];
+            $datainfo = $database_config['connections'][$database];
             $this->pdo = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
                 $datainfo['write']['username'],$datainfo['write']['password']);
 
@@ -71,7 +71,7 @@ class Connection
      */
     public function get($sql,$bind=[]){
         $result = $this->query($sql,$bind);
-        return $result->fetchAll(PDO::FETCH_COLUMN);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
      * 获取一条记录
