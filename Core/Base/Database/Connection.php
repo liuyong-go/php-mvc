@@ -111,8 +111,12 @@ class Connection
      * @param $table
      * @param $values
      */
-    public function insert($table,$values){
-
+    public function insert($table,$values,$affect = false){
+        list($values,$binds) = $this->toBind($values);
+        $fields = implode(',',array_keys($values));
+        $value = implode(',',array_values($values));
+        $sql = 'insert into '.$table.' (.'.$fields.'.) values ('.$value.')';
+        return $this->statement($sql,$binds,$affect);
     }
 
     /**
@@ -121,8 +125,16 @@ class Connection
      * @param $value
      * @param $where
      */
-    public function update($table,$value,$where){
-
+    public function update($table,$values,$where,$whereBinds=[],$affect = false){
+        if(!$values){
+            throw new \Exception('ivalid field');
+        }
+        list($values,$binds) = $this->toBind($values);
+        foreach($values as $key=>$val){
+            $valstr[] = $key.' = '.$val;
+        }
+        $sql = 'update '.$table.' set '.implode(',',$valstr).' where '.$where;
+        return $this->statement($sql,array_merge($binds,$whereBinds),$affect);
     }
 
     /**
@@ -130,8 +142,21 @@ class Connection
      * @param $table
      * @param $where
      */
-    public function delete($table,$where){
-
+    public function delete($table,$where,$whereBinds=[],$affect = false){
+        $sql = 'delete from '.$table.' where '.$where;
+        return $this->statement($sql,$whereBinds,$affect);
+    }
+    /**
+     * 数组直接转换成 key:? [value]格式
+     */
+    public function toBind($values,$prefix='field'){
+        $value = $binds = [];
+        foreach($values as $key=>$val){
+            $bindkey = ':'.$prefix.$key;
+            $value[$key] = $bindkey;
+            $binds[$bindkey] = $val;
+        }
+        return [$value,$binds];
     }
     /**
      * 闭包执行一个事务
