@@ -16,7 +16,7 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        $rs = HomeModel::getInstance()->test_query();
+        $rs = HomeModel::getInstance()->test_insert();
         echo "<pre>";
         print_r($rs);
     }

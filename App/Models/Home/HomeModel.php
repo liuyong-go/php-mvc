@@ -21,4 +21,11 @@ class HomeModel extends BaseModel
         $binds = [52,9];
         return $this->db->get($sql,$binds);
     }
+    public function test_insert(){
+        $arr['clueid'] =52;
+        $arr['dealer_mobile'] ='15313277715';
+        $arr['dealerid'] =52;
+        $arr['dealername'] ='ceshi';
+        return $this->db->insertLastId('crm_clue_extention',$arr);
+    }
 }

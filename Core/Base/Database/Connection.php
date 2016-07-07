@@ -115,8 +115,15 @@ class Connection
         list($values,$binds) = $this->toBind($values);
         $fields = implode(',',array_keys($values));
         $value = implode(',',array_values($values));
-        $sql = 'insert into '.$table.' (.'.$fields.'.) values ('.$value.')';
+        $sql = 'insert into '.$table.' ('.$fields.') values ('.$value.')';
         return $this->statement($sql,$binds,$affect);
+    }
+    /**
+     *
+     */
+    public function insertLastId($table,$values){
+        $this->insert($table,$values);
+        return $this->pdo->lastInsertId();
     }
 
     /**
