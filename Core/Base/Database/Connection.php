@@ -9,35 +9,37 @@ namespace Core\Base\Database;
  */
 class Connection
 {
-    protected  $pdo = [];
+    protected  $pdo;
 
-    protected  $readPdo = [];
+    protected  $readPdo;
 
-    protected  $database = [];
+    private static $instance=null;
 
-    protected  $connect = [];
-
+    public static function getInstance(){
+        if(self::$instance == null){
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
     /**
      * 创建连接
      * @param $database
      */
     public  function setDb($database){
-
-        if(!in_array($database,$this->connect[$database])){
             $database_config = load_config('database');
             $datainfo = $database_config[$database];
-            $this->pdo[$database] = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
+            $this->pdo = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
                 $datainfo['write']['username'],$datainfo['write']['password']);
 
             if(isset($datainfo['read'])){
-                $this->readPdo[$database] = new \PDO('mysql:host='.$datainfo['read']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['read']['port'],
+                $this->readPdo = new \PDO('mysql:host='.$datainfo['read']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['read']['port'],
                     $datainfo['read']['username'],$datainfo['read']['password']);
             }else{
-                $this->readPdo[$database] = $this->pdo[$database];
+                $this->readPdo = $this->pdo;
             }
-            $this->connect[] = $database;
-        }
     }
+
+
 
 
 }
