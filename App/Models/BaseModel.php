@@ -10,6 +10,7 @@ namespace App\Models;
 
 
 use Core\Base\Database\Connection;
+use Core\Base\Database\OrmBuilder;
 
 class BaseModel
 {
@@ -23,8 +24,8 @@ class BaseModel
     protected $db;
 
     public function __construct(){
-        $this->db = Connection::getInstance();
-        $this->db->setDb('default');
+        $this->db = OrmBuilder::getInstance();
+        $this->db->connect('default');
     }
     /**
      * 服务对象实例（单例模式）
@@ -33,7 +34,7 @@ class BaseModel
     public static function getInstance()
     {
 
-        if(array_key_exists(static::class,static::$container) ==false ||  empty(static::$container[static::class]))
+        if(!isset(static::$container[static::class]) ||  empty(static::$container[static::class]))
         {
             static::$container[static::class] =new static();
         }
