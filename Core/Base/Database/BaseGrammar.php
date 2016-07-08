@@ -79,7 +79,6 @@ abstract class BaseGrammar
                 $wrapped[] = $this->wrapValue($segment);
             }
         }
-
         return implode('.', $wrapped);
     }
 
@@ -95,7 +94,7 @@ abstract class BaseGrammar
             return $value;
         }
 
-        return '"'.str_replace('"', '""', $value).'"';
+        return '`'.str_replace('`', '``', $value).'`';
     }
 
     /**

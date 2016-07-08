@@ -37,8 +37,12 @@ class Grammar extends BaseGrammar
         if (is_null($query->columns)) {
             $query->columns = ['*'];
         }
+        $sql = trim($this->concatenate($this->compileComponents($query)));
+        if ($query->unions) {
+            $sql = '('.$sql.') '.$this->compileUnions($query);
+        }
 
-        return trim($this->concatenate($this->compileComponents($query)));
+        return $sql;
     }
 
     /**
@@ -626,7 +630,7 @@ class Grammar extends BaseGrammar
     {
         $joiner = $union['all'] ? ' union all ' : ' union ';
 
-        return $joiner.$union['query']->toSql();
+        return $joiner.'('.$union['query']->toSql().')';
     }
 
     /**
@@ -725,7 +729,16 @@ class Grammar extends BaseGrammar
         // intended records are updated by the SQL statements we generate to run.
         $where = $this->compileWheres($query);
 
-        return trim("update {$table}{$joins} set $columns $where");
+        $sql = trim("update {$table}{$joins} set $columns $where");
+        if (isset($query->orders)) {
+            $sql .= ' '.$this->compileOrders($query, $query->orders);
+        }
+
+        if (isset($query->limit)) {
+            $sql .= ' '.$this->compileLimit($query, $query->limit);
+        }
+
+        return rtrim($sql);
     }
 
     /**
@@ -740,7 +753,23 @@ class Grammar extends BaseGrammar
 
         $where = is_array($query->wheres) ? $this->compileWheres($query) : '';
 
-        return trim("delete from $table ".$where);
+        if (isset($query->joins)) {
+            $joins = ' '.$this->compileJoins($query, $query->joins);
+
+            $sql = trim("delete $table from {$table}{$joins} $where");
+        } else {
+            $sql = trim("delete from $table $where");
+        }
+
+        if (isset($query->orders)) {
+            $sql .= ' '.$this->compileOrders($query, $query->orders);
+        }
+
+        if (isset($query->limit)) {
+            $sql .= ' '.$this->compileLimit($query, $query->limit);
+        }
+
+        return $sql;
     }
 
     /**
@@ -763,7 +792,11 @@ class Grammar extends BaseGrammar
      */
     protected function compileLock(OrmBuilder $query, $value)
     {
-        return is_string($value) ? $value : '';
+        if (is_string($value)) {
+            return $value;
+        }
+
+        return $value ? 'for update' : 'lock in share mode';
     }
 
     /**
