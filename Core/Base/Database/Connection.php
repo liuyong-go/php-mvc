@@ -60,8 +60,8 @@ class Connection
      * @param array $bind
      * @return \PDOStatement
      */
-    public function query($sql,$bind=[]){
-        $pdo = $this->getPdo($sql);
+    public function query($sql,$bind=[],$useWritePdo=false){
+        $pdo = $useWritePdo ? $this->pdo : $this->getPdo($sql);
         $sth = $pdo->prepare($sql);
         $sth->execute($bind);
         return $sth;
@@ -69,15 +69,15 @@ class Connection
     /**
      * 获取多条记录
      */
-    public function get($sql,$bind=[]){
-        $result = $this->query($sql,$bind);
+    public function select($sql,$bind=[],$useWritePdo = false){
+        $result = $this->query($sql,$bind,$useWritePdo);
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
      * 获取一条记录
      */
-    public function first($sql,$bind=[]){
-        $result = $this->query($sql,$bind);
+    public function selectOne($sql,$bind=[],$useWritePdo = true){
+        $result = $this->query($sql,$bind,$useWritePdo);
         return $result->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -98,8 +98,8 @@ class Connection
      * @param array $bind
      * @return bool
      */
-    public function statement($sql,$bind=[],$affect = false){
-        $pdo = $this->getPdo($sql);
+    public function statement($sql,$bind=[],$affect = false,$useWritePdo=true){
+        $pdo = $useWritePdo ? $this->pdo : $this->getPdo($sql);
         $sth = $pdo->prepare($sql);
         $rs = $sth->execute($bind);
         return $affect ? $sth->rowCount() : $rs;
@@ -145,7 +145,6 @@ class Connection
             $valstr[] = $key.' = '.$val;
         }
         $sql = 'update '.$table.' set '.implode(',',$valstr).' where '.$where;
-        echo $sql;
         return $this->statement($sql,array_merge($binds,$whereBinds),$affect);
     }
 
@@ -263,6 +262,7 @@ class Connection
     {
         return $this->transactions;
     }
+
 
 
 

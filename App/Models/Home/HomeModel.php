@@ -19,7 +19,7 @@ class HomeModel extends BaseModel
     public function test_query(){
         $sql = 'select * from crm_clue where id in (?,?)';
         $binds = [52,9];
-        return $this->db->get($sql,$binds);
+        return $this->db->simpleGet($sql,$binds);
     }
     public function test_insert(){
         $arr['clueid'] =54;
