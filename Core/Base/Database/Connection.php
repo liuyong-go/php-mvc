@@ -89,7 +89,7 @@ class Connection
      */
     public function is_write_type($sql)
     {
-        return (bool) preg_match('/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
+        return (bool) preg_match('/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', strtoupper($sql));
     }
 
     /**
@@ -122,7 +122,11 @@ class Connection
      *
      */
     public function insertLastId($table,$values){
-        $this->insert($table,$values);
+        try{
+            $this->insert($table,$values);
+        }catch (\Exception $e){
+            throw $e;
+        }
         return $this->pdo->lastInsertId();
     }
 
@@ -141,6 +145,7 @@ class Connection
             $valstr[] = $key.' = '.$val;
         }
         $sql = 'update '.$table.' set '.implode(',',$valstr).' where '.$where;
+        echo $sql;
         return $this->statement($sql,array_merge($binds,$whereBinds),$affect);
     }
 
@@ -156,12 +161,23 @@ class Connection
     /**
      * 数组直接转换成 key:? [value]格式
      */
-    public function toBind($values,$prefix='field'){
+    public function toBindParam($values,$prefix='field'){
         $value = $binds = [];
         foreach($values as $key=>$val){
             $bindkey = ':'.$prefix.$key;
             $value[$key] = $bindkey;
             $binds[$bindkey] = $val;
+        }
+        return [$value,$binds];
+    }
+    /**
+     * 数组直接转换成 key:? [value]格式
+     */
+    public function toBind($values,$prefix='field'){
+        $value = $binds = [];
+        foreach($values as $key=>$val){
+            $value[$key] = '?';
+            $binds[] = $val;
         }
         return [$value,$binds];
     }

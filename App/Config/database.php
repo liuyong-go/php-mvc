@@ -10,15 +10,15 @@ return [
     'connections'=>[
         'default'=>[
             'read' => [
-                'host' => '172.16.98.12',
-                'username' => 'xin',
-                'password' => '123456',
+                'host' => $_SERVER['DB_XIN_HOST'],
+                'username' => $_SERVER['DB_XIN_USER'],
+                'password' => $_SERVER['DB_XIN_PASS'],
                 'port'=>3306,
             ],
             'write' => [
-                'host' => '172.16.98.12',
-                'username' => 'xin',
-                'password' => '123456',
+                'host' => $_SERVER['DB_XIN_HOST_W'],
+                'username' => $_SERVER['DB_XIN_USER_W'],
+                'password' => $_SERVER['DB_XIN_PASS_W'],
                 'port'=>3306,
             ],
             'database' => 'xin',
