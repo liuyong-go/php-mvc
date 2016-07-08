@@ -1662,8 +1662,7 @@ class OrmBuilder
         // connection and return a result as a boolean success indicator as that
         // is the same type of result returned by the raw connection instance.
         $bindings = $this->cleanBindings($bindings);
-
-        return $this->connection->insert($sql, $bindings);
+        return $this->connection->statement($sql, $bindings);
     }
 
     /**

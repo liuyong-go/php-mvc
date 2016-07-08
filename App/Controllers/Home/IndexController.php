@@ -16,7 +16,7 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        $rs = HomeModel::getInstance()->test_query();
+        $rs = HomeModel::getInstance()->test_delete();
         echo "<pre>";
         print_r($rs);
     }

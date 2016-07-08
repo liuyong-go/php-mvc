@@ -17,22 +17,26 @@ class HomeModel extends BaseModel
         parent::__construct();
     }
     public function test_query(){
-        //$sql = 'select * from crm_clue where id in (?,?)';
-        //$binds = [52,9];
-        return $this->db->from('crm_clue')->whereIn('id',[9,52])->get();
+        return $this->db->from('crm_clue')->select('crm_clue.id','crm_clue_user.name')
+            ->leftJoin('crm_clue_user','crm_clue_user.id','=','crm_clue.user_id')
+            ->whereIn('crm_clue.id',[9,52])->where(function($query){
+                $query->where('clue_type',4)->orWhere('crm_clue.create_from',1);
+            })
+            ->orderBy('crm_clue.id','desc')
+            ->get();
     }
     public function test_insert(){
-        $arr['clueid'] =54;
+        $arr['clueid'] =53;
         $arr['dealer_mobile'] ='15313277715';
         $arr['dealerid'] =52;
         $arr['dealername'] ='ceshi';
-        return $this->db->insertLastId('crm_clue_extention',$arr);
+        return $this->db->from('crm_clue_extention')->insertGetId($arr);
     }
     public function test_update(){
         $arr['dealer_mobile'] ='10000000000';
-        return $this->db->update('crm_clue_extention',$arr,'clueid=?',[52],true);
+        return $this->db->from('crm_clue_extention')->where('clueid',52)->update($arr);
     }
     public function test_delete(){
-        return $this->db->delete('crm_clue_extention','clueid in(?,?)',[53,54],true);
+        return $this->db->from('crm_clue_extention')->whereIn('clueid',[52,53,54])->delete();
     }
 }

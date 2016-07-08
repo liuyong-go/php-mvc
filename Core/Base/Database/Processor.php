@@ -29,9 +29,9 @@ class Processor
      */
     public function processInsertGetId(OrmBuilder $query, $sql, $values, $sequence = null)
     {
-        $query->getConnection()->insert($sql, $values);
+        $query->getConnection()->statement($sql, $values);
 
-        $id = $query->getConnection()->getPdo()->lastInsertId($sequence);
+        $id = $query->getConnection()->getPdo($sql)->lastInsertId($sequence);
 
         return is_numeric($id) ? (int) $id : $id;
     }
