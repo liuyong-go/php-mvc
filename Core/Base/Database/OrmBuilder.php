@@ -1350,7 +1350,6 @@ class OrmBuilder
         if (is_null($this->columns)) {
             $this->columns = $columns;
         }
-
         return $this->processor->processSelect($this, $this->runSelect());
     }
 

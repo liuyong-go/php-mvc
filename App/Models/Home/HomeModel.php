@@ -17,9 +17,9 @@ class HomeModel extends BaseModel
         parent::__construct();
     }
     public function test_query(){
-        $sql = 'select * from crm_clue where id in (?,?)';
-        $binds = [52,9];
-        return $this->db->simpleGet($sql,$binds);
+        //$sql = 'select * from crm_clue where id in (?,?)';
+        //$binds = [52,9];
+        return $this->db->from('crm_clue')->first();
     }
     public function test_insert(){
         $arr['clueid'] =54;
