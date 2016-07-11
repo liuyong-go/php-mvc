@@ -9,7 +9,6 @@
 namespace App\Models;
 
 
-use Core\Base\Database\Connection;
 use Core\Base\Database\OrmBuilder;
 
 class BaseModel
