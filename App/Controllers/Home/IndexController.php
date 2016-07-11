@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
+use App\Library\Result;
 use App\Models\Home\HomeModel;
 use Core\Base\Request;
 
@@ -17,11 +18,11 @@ class IndexController extends BaseController{
     }
     public function index(){
         $rs = HomeModel::getInstance()->test_delete();
-        echo "<pre>";
         print_r($rs);
     }
     public function test(){
-        echo 'test';
+        $result = new Result();
+        echo $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData(['123','456'])->toJson();
     }
     public function user(){
         echo 'user';

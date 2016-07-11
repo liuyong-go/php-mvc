@@ -82,6 +82,7 @@ class Route
         $class = $classReflection->newInstance();
         call_user_func_array([$class,$this->action],$params);
         $this->_suffixMiddleWare();
+        exit;
     }
 
     /**
