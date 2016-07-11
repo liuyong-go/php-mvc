@@ -11,7 +11,7 @@
  * @return mixed
  */
 function loadConfig($path){
-    return require_once APPPATH.'/Config/'.$path.'.php';
+    return require APPPATH.'/Config/'.$path.'.php';
 }
 function loadHelper($path){
     return require_once APPPATH.'/Helpers/'.$path.'.php';

@@ -27,5 +27,17 @@ return [
             'prefix' => '',
             'strict' => false,
         ]
+    ],
+    'redis'=>[
+        'default'=>[
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'database'=>'0'
+        ],
+        'default1'=>[
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'database'=>'1'
+        ],
     ]
 ];

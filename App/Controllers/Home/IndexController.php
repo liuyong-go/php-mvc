@@ -2,6 +2,7 @@
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
 use App\Library\Curl;
+use App\Library\RedisLibrary;
 use App\Library\Result;
 use App\Models\Home\HomeModel;
 use Core\Base\Request;
@@ -18,8 +19,11 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        $rs = HomeModel::getInstance()->test_delete();
-        print_r($rs);
+        $redis = RedisLibrary::getRedis('default');
+        echo "<pre>";
+        var_dump($redis->dbSize());
+        $redis2 = RedisLibrary::getRedis('default1');
+        var_dump($redis2->dbSize());
     }
     public function test(){
         loadHelper('common');
