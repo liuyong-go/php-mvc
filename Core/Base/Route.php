@@ -26,7 +26,7 @@ class Route
      * 根据路由执行控制器方法
      */
     public function run(){
-        $this->config_routes = load_config('routes');
+        $this->config_routes = loadConfig('routes');
         $path = $this->_parseRoutes();
         Request::getInstance()->setRequest();
         $this->_runController($path);

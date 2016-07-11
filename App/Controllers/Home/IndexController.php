@@ -22,8 +22,10 @@ class IndexController extends BaseController{
         print_r($rs);
     }
     public function test(){
+        loadHelper('common');
+        $ip = ip();
         $result = new Result();
-        echo $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData(['123','456'])->toJson();
+        echo $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData(['123',$ip])->toJson();
     }
     public function testCurl(){
         $header = [
