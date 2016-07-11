@@ -39,7 +39,7 @@ class Connection
      * @param $database
      */
     public function setDb($database){
-            $database_config = load_config('database');
+            $database_config = loadConfig('database');
             $datainfo = $database_config['connections'][$database];
             $this->pdo = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
                 $datainfo['write']['username'],$datainfo['write']['password']);
