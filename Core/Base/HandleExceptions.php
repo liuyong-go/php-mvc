@@ -33,6 +33,7 @@ class HandleExceptions{
 
     public function handleException(){
         if(DEBUG){
+            echo '<pre>';
             $traces = debug_backtrace();
             print_r($traces);
         }else{
@@ -43,6 +44,7 @@ class HandleExceptions{
     public function handleShutdown(){
         if(error_get_last()){
             if(DEBUG) {
+                echo '<pre>';
                 print_r(error_get_last());
             }else{
                 echo '意外终止';
