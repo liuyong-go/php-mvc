@@ -1,1 +1,1 @@
-参数<?php echo $hello;?>
+首页

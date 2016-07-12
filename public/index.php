@@ -11,6 +11,8 @@ define('COREPATH',BASEPATH.'/Core');
 
 define('APPPATH',BASEPATH.'/App');
 
+header("Content-type: text/html; charset=utf-8");
+
 require COREPATH.'/Base/CommonFunc.php';
 
 $app_config = require APPPATH.'/Config/app.php';

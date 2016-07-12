@@ -80,7 +80,8 @@ class Route
         $this->_preMiddleWare();
         $classReflection = new \ReflectionClass($classname);
         $class = $classReflection->newInstance();
-        call_user_func_array([$class,$this->action],$params);
+        $result = call_user_func_array([$class,$this->action],$params);
+        echo $result;
         $this->_suffixMiddleWare();
         exit;
     }

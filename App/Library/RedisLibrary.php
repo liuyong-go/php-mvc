@@ -19,6 +19,7 @@ class RedisLibrary
     }
 
     /**
+     * RedisLibrary::getRedis('default')
      * @param string $db
      * @return \Redis
      */

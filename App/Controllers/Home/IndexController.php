@@ -19,17 +19,14 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        $redis = RedisLibrary::getRedis('default');
-        echo "<pre>";
-        var_dump($redis->dbSize());
-        $redis2 = RedisLibrary::getRedis('default1');
-        var_dump($redis2->dbSize());
+        return views('home/index');
     }
     public function test(){
         loadHelper('common');
         $ip = ip();
         $result = new Result();
-        echo $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData(['123',$ip])->toJson();
+        $data = views('home/index');
+        return $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData([$data,$ip])->toJson();
     }
     public function testCurl(){
         $header = [
@@ -43,6 +40,6 @@ class IndexController extends BaseController{
         ];
         $url = 'https://www.baidu.com';
         $res = Curl::getInstance()->to($url)->withOption('HTTPHEADER', $header)->withData(json_encode($data))->get();
-        echo $res;
+        return $res;
     }
 }
