@@ -25,13 +25,7 @@ function loadHelper($path){
  * @return string
  */
 function views($file,$data=[]){
-    ob_start();
-    $viewPath = APPPATH.'/Views/'.$file.'.php';
-    extract($data);
-    include($viewPath);
-    $buffer = ob_get_contents();
-    @ob_end_clean();
-    return $buffer;
+    return \Core\Base\View::getInstance()->views($file,$data);
 }
 
 /**
