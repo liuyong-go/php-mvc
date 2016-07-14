@@ -2,6 +2,7 @@
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
 use App\Library\Curl;
+use App\Library\Pagination;
 use App\Library\RedisLibrary;
 use App\Library\Result;
 use App\Models\Home\HomeModel;
@@ -19,7 +20,12 @@ class IndexController extends BaseController{
 
     }
     public function index(){
-        return views('home/index');
+
+        //return views('home/index');
+        $config['total_rows'] = 200;
+        $config['per_page'] = 20;
+        $pages = new Pagination($config);
+        return $pages->create_links();
     }
     public function test(){
         loadHelper('common');
