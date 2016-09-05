@@ -23,8 +23,12 @@ class BaseModel
     protected $db;
 
     public function __construct(){
-        $this->db = OrmBuilder::getInstance();
-        $this->db->connect('default');
+
+    }
+    public function DB($database='default'){
+        $DB = new OrmBuilder();
+        $DB->connect($database);
+        return $DB;
     }
     /**
      * 服务对象实例（单例模式）

@@ -7,9 +7,9 @@
 				
 				<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
 				
-				<h1>500</h1>
-				<h2><?php echo $message?></h2>
-				<p>请尝试其他页面</p>
+				<h1>404</h1>
+				<h2>你查找的页面不存在</h2>
+				<p>2秒钟后跳转到首页</p>
 				
 				</div><!--/col-->
 				
@@ -22,3 +22,6 @@
 	</div><!--/container-->
 
 <?php echo views('common/footer')?>
+<script type="text/javascript">
+	timeToUrl('/index',2000);
+</script>

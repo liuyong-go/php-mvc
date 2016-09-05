@@ -155,7 +155,7 @@ class Result
      */
     public function toJson()
     {
-        header("Content-type: application/json; charset=utf-8");
+        //header("Content-type: application/json; charset=utf-8");
         return json_encode($this->reslut_arr);
     }
 }

@@ -11,7 +11,7 @@ class OverDo
     public function __construct(){
 
     }
-    public function handle($request){
-        return;
+    public function handle(){
+        return true;
     }
 }

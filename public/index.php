@@ -25,5 +25,7 @@ require COREPATH.'/Base/Bootstrap.php';
 
 $app = new \Core\Base\Bootstrap();
 
+session_start();
+
 $app->run();
 

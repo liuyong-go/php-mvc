@@ -1,11 +1,8 @@
 <?php
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
-use App\Library\Curl;
-use App\Library\Pagination;
-use App\Library\RedisLibrary;
 use App\Library\Result;
-use App\Models\Home\HomeModel;
+use App\Models\Home\UserModel;
 use Core\Base\Request;
 
 /**
@@ -20,32 +17,7 @@ class IndexController extends BaseController{
 
     }
     public function index(){
+       echo 'index';
+    }
 
-        //return views('home/index');
-        $config['total_rows'] = 200;
-        $config['per_page'] = 20;
-        $pages = new Pagination($config);
-        return $pages->create_links();
-    }
-    public function test(){
-        loadHelper('common');
-        $ip = ip();
-        $result = new Result();
-        $data = views('home/index');
-        return $result->setCode(Result::CODE_SUCCESS)->setMsg('操作成功')->setData([$data,$ip])->toJson();
-    }
-    public function testCurl(){
-        $header = [
-            "Content-Type: application/text",
-            "loginname:loyal"
-        ];
-        //取分机号
-        $data = ['recordtype' => 0,
-            'recordid' => '100164960521',
-            'date' => '20160419142635'
-        ];
-        $url = 'https://www.baidu.com';
-        $res = Curl::getInstance()->to($url)->withOption('HTTPHEADER', $header)->withData(json_encode($data))->get();
-        return $res;
-    }
 }

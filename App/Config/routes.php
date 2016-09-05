@@ -9,7 +9,11 @@ return [
     'default_route'=>'home/index',
     'controller_route'=>[
         'index'=>'home/index',
-        'test'=>'home/test'
+        'supply'=>'home/supply',
+        'common'=>'home/common',
+        'my' => 'home/need/my',
+        'need'=> 'home/need',
+        'resource'=> 'home/resource',
     ],
     'preg_route'=>[
         'u_([0-9]+)_([0-9]+)'=>'home/index/user/$1/$2',
@@ -18,7 +22,9 @@ return [
      * 前置中间件
      */
     'pre_middleware'=>[
-        'Home\IndexController'=>['LegalCheck','LoginCheck']
+        'Home\IndexController'=>['LegalCheck'],
+        'Home\SupplyController'=>['LoginCheck']
+
     ],
     /**
      * 后置中间件

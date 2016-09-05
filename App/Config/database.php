@@ -10,18 +10,18 @@ return [
     'connections'=>[
         'default'=>[
             'read' => [
-                'host' => $_SERVER['DB_XIN_HOST'],
-                'username' => $_SERVER['DB_XIN_USER'],
-                'password' => $_SERVER['DB_XIN_PASS'],
+                'host' => '127.0.0.1',
+                'username' => 'root',
+                'password' => '123',
                 'port'=>3306,
             ],
             'write' => [
-                'host' => $_SERVER['DB_XIN_HOST_W'],
-                'username' => $_SERVER['DB_XIN_USER_W'],
-                'password' => $_SERVER['DB_XIN_PASS_W'],
+                'host' => '127.0.0.1',
+                'username' => 'root',
+                'password' => '123',
                 'port'=>3306,
             ],
-            'database' => 'xin',
+            'database' => 'market',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
