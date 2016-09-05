@@ -327,6 +327,18 @@ class OrmBuilder
 
         return $this;
     }
+    /**
+     * Set the table which the query is targeting.
+     *
+     * @param  string  $table
+     * @return $this
+     */
+    public function table($table)
+    {
+        $this->from = $table;
+
+        return $this;
+    }
 
     /**
      * Add a join clause to the query.
@@ -1336,7 +1348,7 @@ class OrmBuilder
     {
         $results = $this->take(1)->get($columns);
 
-        return count($results) > 0 ? reset($results) : null;
+        return count($results) > 0 ? reset($results) : [];
     }
 
     /**

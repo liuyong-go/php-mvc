@@ -62,7 +62,7 @@ class Route
             }
         }
         if($controller_path == ''){
-            show_error('没有找到控制器');
+            show_404();
         }
     }
     /**
@@ -77,13 +77,14 @@ class Route
         $params = array_slice($pathParam,3);
         $this->controller = $namespace.'\\'.$controller;
         $classname =   'App\Controllers\\'.$namespace.'\\'.$controller;
+        $routePath = ['namespace'=>$namespace,'controller'=>$controller,'action'=>$this->action];
+        Request::getInstance()->setRoutePath($routePath);
         $this->_preMiddleWare();
         $classReflection = new \ReflectionClass($classname);
         $class = $classReflection->newInstance();
-        $result = call_user_func_array([$class,$this->action],$params);
+        $result = call_user_func_array([$class, $this->action], $params);
         echo $result;
         $this->_suffixMiddleWare();
-        exit;
     }
 
     /**
@@ -96,7 +97,10 @@ class Route
                 $classname =   'App\Middleware\\'.$mid;
                 $classReflection = new \ReflectionClass($classname);
                 $class = $classReflection->newInstance();
-                $class->handle(Request::getInstance()->getRequest());
+                $rs = $class->handle();
+                if(!($rs === true)){
+                    echo $rs;exit;
+                }
             }
         }
     }
@@ -111,7 +115,7 @@ class Route
                 $classname =   'App\Middleware\\'.$mid;
                 $classReflection = new \ReflectionClass($classname);
                 $class = $classReflection->newInstance();
-                $class->handle(Request::getInstance()->getRequest());
+                $class->handle();
             }
         }
     }

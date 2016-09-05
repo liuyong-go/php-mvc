@@ -43,13 +43,15 @@ class Connection
             $datainfo = $database_config['connections'][$database];
             $this->pdo = new \PDO('mysql:host='.$datainfo['write']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['write']['port'],
                 $datainfo['write']['username'],$datainfo['write']['password']);
-
+            $this->pdo->query('set names utf8;');
             if(isset($datainfo['read'])){
                 $this->readPdo = new \PDO('mysql:host='.$datainfo['read']['host'].';dbname='.$datainfo['database'].';port='.$datainfo['read']['port'],
                     $datainfo['read']['username'],$datainfo['read']['password']);
+                $this->readPdo->query('set names utf8;');
             }else{
                 $this->readPdo = $this->pdo;
             }
+
     }
     public function getPdo($sql){
         return $this->transactions>0 ? $this->pdo : ($this->is_write_type($sql) ? $this->pdo : $this->readPdo);

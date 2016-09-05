@@ -37,7 +37,7 @@ class HandleExceptions{
             $traces = debug_backtrace();
             print_r($traces);
         }else{
-            echo 'exception';
+            show_error('程序出现异常');
         }
     }
 
@@ -47,7 +47,7 @@ class HandleExceptions{
                 echo '<pre>';
                 print_r(error_get_last());
             }else{
-                echo '意外终止';
+                show_error('程序意外终止');
             }
         }
 
