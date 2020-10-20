@@ -80,6 +80,7 @@ class Result
     /**
      *
      * @param $code Result::CODE_SUCCESS
+     *
      */
     public function setCode($code)
     {

@@ -2,7 +2,9 @@
 namespace App\Controllers\Home;
 use App\Controllers\BaseController;
 use App\Library\Result;
+use App\Models\Home\RegisterModel;
 use App\Models\Home\UserModel;
+use App\Service\Home\IndexService;
 use Core\Base\Request;
 
 /**
@@ -14,10 +16,15 @@ use Core\Base\Request;
 class IndexController extends BaseController{
 
     public function __construct(){
-
+        $this->rs = new Result();
     }
+
+    /**
+     * @return false|string
+     */
     public function index(){
-       echo 'index';
+        $res = IndexService::getInstance()->TestHello();
+        return $this->rs->setCode(Result::CODE_SUCCESS)->setData($res)->toJson();
     }
 
 }

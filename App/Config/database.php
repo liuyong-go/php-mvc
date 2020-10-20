@@ -11,17 +11,17 @@ return [
         'default'=>[
             'read' => [
                 'host' => '127.0.0.1',
-                'username' => 'root',
-                'password' => '123',
+                'username' => 'liuyongnihao',
+                'password' => 'sj223IUss*22s',
                 'port'=>3306,
             ],
             'write' => [
                 'host' => '127.0.0.1',
-                'username' => 'root',
-                'password' => '123',
+                'username' => 'liuyongnihao',
+                'password' => 'sj223IUss*22s',
                 'port'=>3306,
             ],
-            'database' => 'market',
+            'database' => 'micro_register',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
